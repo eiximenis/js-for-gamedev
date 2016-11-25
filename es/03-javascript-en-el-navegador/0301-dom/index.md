@@ -68,6 +68,9 @@ Es un **lenguaje dinámico** orientado a prototipos, con características funcio
 console.log("Hello, world!");
 ```
 
+**Nota:** Que no te lleve a engaño el que JavaScript sea "interpretado": Los motores actuales de JavaScript tienen características muy avanzadas. Algunos
+de ellos realizan compilaciones JIT (_Just in time_) mientras que otros realmente compilan el código antes de ejecutarlo.
+
 ## ¿Qué pasa cuando se accede a una página desde un navegador?
 
 Entender cómo funciona el tráfico de red a un nivel básico es necesario para comprender –y poder arreglar o mitigar– ciertas situaciones. Por ejemplo, por qué un juego tarda mucho en cargarse, por qué ciertos _assets_ no se cargan, cómo hacer que la página no se quede en blanco mientras el juego se carga, etc.
@@ -275,6 +278,37 @@ for (var i = 0; i < buttons.length; i++) {
 <small>Aunque también podemos iterar con `Array.forEach` si lo utilizamos con `apply`…</small>
 
 
+### Bucle for..of
+
+**Nota: ** Esta sección no está en el original, por ser propia de EcmaScript 2015
+
+Una de las grandes novedades que EcmaScript 2015 añade al lenguaje es el concepto de _iterable_. Un _iterable_ es un objeto
+por el cual se puede iterar. La gracia de dicho concepto es que no está atado a ninguna implementación. Así, los arrays son
+_iterables_ pero no cualquier _iterable_ debe ser un array. De hecho nuestros propios objetos pueden serlo.
+
+Y la `NodeList` lo es. Por supuesto el concepto de _iterable_ por si solo no aporta nada si el lenguaje no da una manera
+sencilla de iterar sobre él. Y en JavaScript ese mecanismo es el bucle `for..of`. Dicho bucle permite iterar por todos
+los elementos de un _iterable_ de una forma sencilla:
+
+```js
+const buttons = document.querySelectorAll('button');
+for (let button of buttons) {
+    button.style = "display: none"; // hide buttons
+}
+```
+
+Observa que gracias al uso de `for..of` no es necesario usar una variable índice. El código se simplifica y queda mucho más
+elegante. Veamos otro ejemplo ahora con arrays:
+
+```js
+const values = [1,2,3,4,5];
+let accum = 0;
+for (let v of values) {
+  accum = accum + v;
+}
+console.log(accum);   // La suma de los valores del array (15)
+```
+
 ### Navegar el árbol del DOM
 
 Una vez que hemos accedido a un elemento, podemos navegar –recorrer- el árbol del DOM a partir de él.
@@ -303,7 +337,7 @@ p.innerHTML = 'Párrafo con <b>negrita</b>';
 `style` nos permite aplicar **estilos CSS inline**. Estos estilos tienen la máxima prioridad, así que son muy útiles para ocultar/mostrar elementos, por ejemplo.
 
 ```javascript
-var previousDisplay = button.style.display;
+let previousDisplay = button.style.display;
 button.style="display:none"; // oculta cualquier elemento
 button.style="display:inline-block;" // muestra el botón
 ```
@@ -331,7 +365,7 @@ Manipular el DOM (esto es, insertar y eleminar elementos) nos permite alterar di
 Ya hemos visto que se pueden insertar elementos HTML nuevos a través de la propiedad `innerHTML`, pero también los podemos crear desde cero, con `createElement`:
 
 ```javascript
-var button = document.createElement('button');
+let button = document.createElement('button');
 button.innerHTML = 'Start';
 button.setAttribute('type', 'button');
 
@@ -400,7 +434,7 @@ Esta es la manera **recomendada y más segura**, especialmente si se usa código
 Para subscribirnos a un evento usamos el método `addEventListener`, y para cancelar la subscripción usamos `removeEventListener` (al que hay que pasarle la función de callback para que sepa qué subscripción en particular cancelar).
 
 ```javascript
-var sayHi = function () { /* */ };
+const sayHi = function () { /* */ };
 // subscripción
 button.addEventListener('click', sayHi);
 // cancelar la subscripción
@@ -425,7 +459,7 @@ Por ejemplo, en el siguiente código, si el usuario hace click en el botón se d
 ```
 
 ```javascript
-var section = document.querySelector('section')
+let section = document.querySelector('section')
 section.addEventListener('click', function () {
     console.log('Clicked…');
 });

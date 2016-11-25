@@ -7,11 +7,6 @@ Durante esta lección, [codificarás en JavaScript lo aprendido en la lección
 anterior](
 ../0201-programacion-orientada-a-objetos/articulo.md).
 
-No todos los lenguajes permiten una transcripción 1 a 1 de los conceptos que
-recogemos en el modelo. Por ejemplo, JavaScript no tiene un mecanismo para crear
-tipos nuevos, pero tiene otros mecanismos que permiten implementar una
-funcionalidad similar.
-
 ## Experimentando con JavaScript
 
 Vas a experimentar con JavaScript, así que necesitarás una forma rápida de
@@ -31,7 +26,7 @@ Ahora puedes probar a introducir algunas expresiones:
 ```sh
 > 40 + 2
 42
-> var point = { x: 1, y: 1 };
+> let point = { x: 1, y: 1 };
 undefined
 > point
 { x: 1, y: 1 }
@@ -49,7 +44,7 @@ programa y usar `console.log()` para mostrar expresiones por pantalla.
 ```js
 // en el fichero prueba.js
 console.log(40 + 2);
-var point = { x: 1, y: 1 };
+let point = { x: 1, y: 1 };
 console.log(point);
 console.log('Coordenada X:', point.x);
 ```
@@ -77,16 +72,16 @@ consola de Node en otra.
 
 Se llaman **tipos primitivos** a aquellos que vienen con el lenguaje y que
 permiten la creación de nuevos tipos más complejos. En JavaScript, los tipos
-primitivos son: **booleanos**, **números**, **cadenas** (_strings_), **objetos** y
-**funciones**.
+primitivos son: **booleanos**, **números**, **cadenas** (_strings_), **objetos**
+**funciones** y **símbolos**.
 
 ```js
 // En los comentarios hay más valores posibles para cada uno de los tipos.
-var bool = true; // false
-var number = 1234.5; // 42, -Infinity, +Infinity
-var text = 'I want to be a pirate!'; // "I want to be a pirate"
-var object = {}; // [], null
-var code = function () { return 42; };
+let bool = true; // false
+let number = 1234.5; // 42, -Infinity, +Infinity
+let text = 'I want to be a pirate!'; // "I want to be a pirate"
+let object = {}; // [], null
+let code = function () { return 42; };
 ```
 
 Los puedes reconocer porque responden de manera distinta al operador `typeof`.
@@ -104,7 +99,7 @@ En JavaScript se puede declarar una variable y no asignarle ningún valor. En
 este caso, el tipo de la variable será `'undefined'`.
 
 ```js
-var x;
+let x;
 typeof x;
 x = 5; // tan pronto como le demos un valor, el tipo dejará de ser undefined.
 typeof x;
@@ -121,7 +116,7 @@ valor en el eje X con la cadena `'x'` y el valor en el eje Y con la cadena
 `'y'`.
 
 ```js
-var point = { 'x': 10, 'y': 15 };
+let point = { 'x': 10, 'y': 15 };
 ```
 
 Cada par etiqueta y valor se llama **propiedad del objeto**. No es algo
@@ -135,7 +130,7 @@ https://developer.mozilla.org/en-US/docs/Glossary/Identifier) en JavaScript, las
 comillas no son necesarias y podemos ahorrárnoslas.
 
 ```js
-var point = { x: 10, y: 10 }; // mucho más conveniente.
+let point = { x: 10, y: 10 }; // mucho más conveniente.
 ```
 
 Este es el caso más frecuente, el _recomendado_, y el que usaremos a los largo
@@ -263,8 +258,8 @@ _Arrays_ y objetos tienen tipo `'object'`, así que se ha de usar el método
 para distinguirlos.
 
 ```js
-var obj = {}; // el objeto vacío es tan válido como cualquier otro.
-var arr = []; // una lista sin elementos, como te puedes imaginar.
+let obj = {}; // el objeto vacío es tan válido como cualquier otro.
+let arr = []; // una lista sin elementos, como te puedes imaginar.
 typeof obj; // será object.
 typeof arr; // será object.
 Array.isArray(obj); // será false.
@@ -287,7 +282,7 @@ comprobar si debemos continuar la batalla:
 
 ```js
 function getNextAliveEnemy() {
-  var nextEnemy;
+  let nextEnemy;
   if (aliveEnemies.length > 0) {
     nextEnemy = aliveEnemies[0];
   }
@@ -301,7 +296,7 @@ function getNextAliveEnemy() {
 O bien, supón la ficha de personaje de un héroe:
 
 ```js
-var hero = { sword: null, shield: null };
+let hero = { sword: null, shield: null };
 hero.sword = { attack: 20, magic: 5 }; // coge una espada.
 hero.sword = null; // suelta la espada.
 ```
@@ -314,7 +309,7 @@ valores pueden ser otros objetos y _arrays_, números, cadenas o funciones.
 El siguiente ejemplo muestra una posible ficha de personaje de un RPG:
 
 ```js
-var hero = {
+let hero = {
   name: 'Link',
   life: 100,
   weapon: { kind: 'sword', power: 20, magicPower: 5 },
@@ -367,9 +362,9 @@ objeto:
 [] !== []; // igual que antes.
 [1, 2, 3] !== [1, 2, 3]; // la forma da igual, los objetos son distintos.
 null === null; // pero con null funciona porque sólo hay un valor null.
-var obj = {};
-var sameObj = obj;
-var another = {};
+let obj = {};
+let sameObj = obj;
+let another = {};
 sameObj === obj; // funciona porque ambos nombres se refieren al mismo objeto.
 sameObj !== another; // insisto, distintos, pese a la forma.
 ```
@@ -394,7 +389,7 @@ En el ejemplo de _Space Invaders_, el estado de los enemigos formado por:
 Se puede codificar mediante:
 
 ```js
-var enemy = {
+let enemy = {
   graphic: 'specie01.png',
   currentDirection: 'right',
   position: { x: 10, y: 10 },
@@ -415,7 +410,7 @@ ciertas propiedades. Una práctica muy común en JavaScript es añadir un guión
 bajo `_` a los atributos que consideramos que son **privados**:
 
 ```js
-var enemy = {
+let enemy = {
   _graphic: 'specie01.png',
   _currentDirection: 'right',
   _position: { x: 10, y: 10 },
@@ -438,16 +433,16 @@ implementarse como **funciones** en propiedades de un objeto.
 ![API del enemigo en el modelado de Space Invaders]( images/space-invaders-enemy-api.png)
 
 ```js
-var enemy = {
+let enemy = {
   _graphic: 'specie01.png',
   _currentDirection: 'right',
   _position: { x: 10, y: 10 },
   _score: 40,
 
-  moveLeft: function () { console.log('Going left!'); },
-  moveRight: function () { console.log('Going right!'); },
-  advance: function () { console.log('Marching forward!'); },
-  shoot: function () { console.log('PICHIUM!'); } // (es un láser)
+  moveLeft () { console.log('Going left!'); },
+  moveRight  () { console.log('Going right!'); },
+  advance () { console.log('Marching forward!'); },
+  shoot  () { console.log('PICHIUM!'); } // (es un láser)
 };
 ```
 
@@ -461,6 +456,9 @@ enemy.moveLeft();
 enemy.advance();
 enemy['shoot'](); // es lo mismo, acceder con corchetes y llamar con ().
 ```
+
+**Nota:** Observa como NO es necesario el uso de palabra _function_ en EcmaScript 2015
+para declarar funciones como parte de objetos.
 
 Cualquier función puede actuar como método. Para que actúe como un método
 tan sólo es necesario **llamarla desde la propiedad de un objeto**. Y, como
@@ -567,7 +565,7 @@ Así que no es lo mismo el nombre `uno` que el valor `1`, y por supuesto, no
 es obligatoria ninguna relación coherente entre el nombre y el valor.
 
 ```js
-var uno = 2; // para el programa tiene sentido, quizás para el programador no.
+let uno = 2; // para el programa tiene sentido, quizás para el programador no.
 ```
 
 En general, hablando de booleanos, cadenas y números, decimos que los **nombres
@@ -602,7 +600,7 @@ crearíamos otros valores, como números o cadenas:
 
 ```js
 // Introduce una variable recursiveFunction que apunta a OTRA funcion factorial.
-var recursiveFunction = function factorial(number) {
+let recursiveFunction = function factorial(number) {
   if (number === 0) {
     return 1;
   }
@@ -618,8 +616,8 @@ La misma función puede referirse desde múltiples variables o, dicho de otra
 manera, tener muchos nombres:
 
 ```js
-var a = recursiveFunction;
-var b = recursiveFunction;
+let  a = recursiveFunction;
+let b = recursiveFunction;
 a === b; // es cierto, se refieren a la misma función.
 a.name; // el nombre de la función no tiene que ver con el de la variable.
 b.name; // lo mismo.
@@ -651,37 +649,38 @@ true.toString();
 (function (parameter) { return parameter; }).length;
 ```
 
-## Tipos y constructores de objetos
+## Clases
 
-Hemos comentado que JavaScript no permite modelar tipos nuevos y que
-hace falta "dar un rodeo". Esta es una de las principales diferencias con otros
-lenguajes orientados a objetos.
+**Nota:** En el original el título es "Tipos y constructores de objetos" y habla de las
+funciones constructoras. Dado que ya están cubiertas en el original, no se cubren aquí
+pero en su lugar se usan las clases que es el mecanismo en EcmaScript 2015 pensado
+para este uso.
 
-Lo que se debe hacer es saltarse el concepto de _tipo_ para abordar directamente
-el de **_constructor_**.
+JavaScript permite el uso de clases para crear nuevos tipos. De todos modos es un concepto
+de _tipo_ un poco relajado: en tiempo de ejecución todo son objetos. Es decir, da igual
+la clase que se use para obtener un objeto, su valor de typeof será siempre "object".
 
 ![Constructores de objetos](images/space-invaders-constructor-example.png)
 
-Vamos a crear dos funciones constructoras: una para puntos y otra para disparos.
+Vamos a crear dos clases: una para puntos y otra para disparos.
 
 ```js
-function newPoint(x, y) {
-    var obj = {};
-    obj.x = x;
-    obj.y = y;
-
-    return obj;
+class Point {
+    constructor(x,y) {
+        this.x = x;
+        this.y = y;
+    }
 }
 
-function newShot(position, velocity) {
-    var obj = {};
-    obj._position = position;
-    obj._velocity = velocity;
-    obj.advance = function () {
-        this._position.y += this._velocity;
-    };
+class Shot {
+    constructor(position, velocity) {
+        this._position = position;
+        this._velocity = velocity;
+    }
 
-    return obj;
+    advance() {
+        this._position.y += this._velocity;
+    }
 }
 ```
 
@@ -692,89 +691,15 @@ Ahora podríamos crear disparos con algo así:
 
 ```js
 // Velocidad positiva para que se mueva hacia abajo.
-var enemyShot = newShot(newPoint(15, 15), 2);
+let enemyShot = new Shot(new Point(15, 15), 2);
 
 // Velocidad negativa para que se mueva hacia arriba.
-var allyShot = newShot(newPoint(15, 585), -2);
+let allyShot = new Shot(new Point(15, 585), -2);
 
 enemyShot !== allyShot;
 ```
-
-### Reaprovechando funcionalidad
-
-El problema con esta aproximación es que estamos creando funciones distintas
-para comportamientos idénticos: una función por objeto.
-
-```js
-var s1 = newShot(newPoint(15, 15), 2);
-var s2 = newShot(newPoint(15, 15), 2);
-var s3 = newShot(newPoint(15, 15), 2);
-s1.advance !== s2.advance;
-s2.advance !== s3.advance;
-s3.advance !== s1.advance;
-```
-
-Esto es altamente ineficiente, dado que cada función ocupa un espacio distinto
-en memoria.
-
-Realmente no son necesarias tantas funciones, sino una solamente actuando sobre
-distintos objetos.
-
-Así que es mejor **crear un objeto que contenga únicamente la API**:
-
-```js
-var shotAPI = {
-    advance: function () {
-        this._position.y += this._velocity;
-    }
-};
-```
-
-Y usarlo en la creación del objeto para compartir los métodos de la API:
-
-```js
-function newShot(position, velocity) {
-    var obj = {};
-    obj._position = position;
-    obj._velocity = velocity;
-    obj.advance = shotAPI.advance;
-    return obj;
-}
-```
-
-Ahora todas las instancias comparten la misma función, pero cada función actúa
-sobre el objeto correspondiente gracias al valor de `this`:
-
-```js
-var s1 = newShot(newPoint(15, 15), 2);
-var s2 = newShot(newPoint(15, 15), 2);
-var s3 = newShot(newPoint(15, 15), 2);
-s1.advance === s2.advance; // ahora SÍ son iguales.
-s2.advance === s3.advance;
-s3.advance === s1.advance;
-```
-
-Para hacer todavía más fuerte la asociación entre el constructor y la API,
-vamos a realizar una pequeña modificación: crear el objeto con
-la API como una **propiedad de la función constructora**, quedando así todo
-agrupado en el mismo sitio (la función `newShot`).
-
-```js
-function newShot(position, velocity) {
-    var obj = {};
-    obj._position = position;
-    obj._velocity = velocity;
-    obj.advance = newShot.api.advance;
-    return obj;
-}
-
-// Una función es un objeto, así que le podemos añadir una propiedad.
-newShot.api = {
-    advance: function () {
-        this._position.y += this._velocity;
-    }
-};
-```
+Debe observarse el uso del operador _new_ para crear objetos. JavaScript obliga siempre al uso
+de _new_ para crear objetos a partir de clases.
 
 ## La cadena de prototipos
 
@@ -807,13 +732,13 @@ Crear esta jerarquía en JavaScript requiere el uso de [`Object.create()`]( http
 
 ```js
 // La cadena se monta de atrás hacia adelante.
-var obj3 = { f: 6 };
+let obj3 = { f: 6 };
 // Encadenamos obj2 a obj3
-var obj2 = Object.create(obj3);
+let obj2 = Object.create(obj3);
 obj2.d = 4;
 obj2.e = 5;
 // Encadenamos obj1 a obj2
-var obj1 = Object.create(obj2);
+let obj1 = Object.create(obj2);
 obj1.a = 1;
 obj1.b = 2;
 obj1.c = 3;
@@ -858,131 +783,100 @@ Object.getPrototypeOf(obj3) === Object.prototype;
 Object.getPrototypeOf(Object.prototype) === null;
 ```
 
-## Constructores y cadenas de prototipos
+## Clases y cadenas de prototipos
 
-Los prototipos se prestan a ser el lugar ideal para contener la API, que es el
-comportamiento común de todos los objetos de un tipo.
+**Nota:** En el original se llama "Constructores y cadenas de prototipos" y comenta la cadena
+de prototipos en objetos creados a partir de funciones. En esta versión se comenta la cadena
+de prototipos de objetos creados a partir de clases. 
+
+Es vital entender que, incluso aún usando clases, la cadena de prototipos sigue existiendo en tiempo
+de ejecución.
 
 ```
-var obj = newShot()                               newShot.api
-{ _position: { x: 10, y: 10 }, _velocity: 2 } --> { advance: function ... };
+let obj = new Shot(new Point(10,10), 2)                               Shot.prototype
+{ _position: { x: 10, y: 10 }, _velocity: 2 } ----------------------> advance: function ... };
 obj._position.y ------↑                             ↑
 obj.advance ----------------------------------------|
 obj.goBack ------------------------------------------------------------------X
 ```
 
-Para crear este enlace, modificaremos nuestro constructor de la siguiente forma:
+Observa que automáticamente el prototipo de _obj_ pasa a ser el objeto _Shot.prototype_ que es el que contiene
+todas las funciones definidas en la clase. Es por ello que el siguiente código funciona:
 
 ```js
-function newShot(position, velocity) {
-    // Con esto la API es el prototipo del objeto.
-    var obj = Object.create(newShot.api);
-    obj._position = position;
-    obj._velocity = velocity;
-
-    return obj;
-}
-
-newShot.api = {
-    advance: function () {
-        this._position.y += this._velocity;
-    }
-};
+let shot = new Shot(new Point(10,10), 2);
+shot.advance();  // advance() no está en shot pero sí que está en su prototipo (Shot.prototype)
 ```
-
-Prueba ahora a crear un nuevo disparo:
+Puedes comprobar que, efectivamente, el prototipo de _shot_ es _Shot.prototype_:
 
 ```js
-var shot = newShot({x: 0, y: 0}, 2);
-shot; // al inspeccionar shot sólo se muestran las propiedades del objeto.
-shot.advance; // pero advance existe en su prototipo.
+Object.getPrototypeOf(shot) === Shot.prototype;      // true
 shot.hasOwnProperty('advance'); // false
 Object.getPrototypeOf(shot).hasOwnProperty('advance'); // true
 ```
-
-Si hacemos esto con todos los constructores, pronto encontraremos un patrón:
-
-1. Crear un objeto para contener la API.
-
-2. Implementar la API como propiedades de este objeto.
-
-3. En el constructor, hacer que este objeto sea el prototipo de un nuevo objeto.
-
-4. Establecer las propiedades del nuevo objeto con el estado.
-
-5. Devolver el nuevo objeto.
-
-Sólo los pasos 2 y 4 involucran diferencias de un constructor a otro, todo lo
-demás es exactamente igual. Tanto es así, que JavaScript lo tiene en cuenta
-y viene con los mecanismos para automatizar los pasos 1, 3 y 5.
-
-Primero, JavaScript permite que _cualquier función_ pueda usarse como
-constructor. Por eso, cada vez que escribimos una función, JavaScript crea una
-**propiedad de la función llamada `prototype`**, que es un
-objeto con una única propiedad `constructor` que apunta a la función.
+Quizá te preguntes qué es el objeto _Shot.prototype_. Bien, la realidad es que en tiempo
+de ejecución las clases son transformadas en funciones (no entraremos en detalles). En
+JavaScript desde siempre las funciones tienen su propio prototipo. Es decir, dado el siguiente
+código:
 
 ```js
 function anyFunction() {}
-anyFunction.prototype;
-anyFunction.prototype.constructor === anyFunction;
+let proto = anyFunction.prototype;
 ```
+El objeto _proto_ apunta al prototipo de la función. Si te sorprende que las funciones tengan
+prototipo, recuerda que en JavaScript todo son objetos (y "todo" incluye a las funciones). Así
+que es natural que las funciones tengan un prototipo.
 
-Esto automatiza el paso 1: ya no es necesario el objeto `api` que preparábamos
-nosotros manualmente. La propiedad `prototype` es equivalente a la propiedad
-`api`.
-
-Ahora, al llamar a la función con el operador `new` delante, se crea un **nuevo
-objeto cuyo prototipo es precisamente la propiedad `prototype`** de la función:
+El uso tradicional en JavScript del prototipo de una función consiste el equivalente de JavaScript
+de funciones "estáticas" en otros lenguajes:
 
 ```js
-var obj = new anyFunction();
-var anotherObj = new anyFunction();
-
-// Los objetos son distintos.
-obj !== anotherObj;
-
-// Pero sus prototipos son iguales.
-Object.getPrototypeOf(obj) === Object.getPrototypeOf(anotherObj);
-
-// Y además son la propiedad prototype de la función.
-Object.getPrototypeOf(obj) === anyFunction.prototype;
-```
-
-Con esto se automatiza el paso 3: ya no es necesario llamar a `Object.create()`
-para establecer la cadena de prototipos entre objeto y API (lo conseguimos
-automáticamente al utilizar el operador `new`).
-
-Finalmente, cuando se llama con `new`, la **función recibe como objeto de
-contexto (el `this`) el elemento que está siendo creado**, lo que nos
-permite establecer sus atributos.
-
-```js
-function Hero(name) {
-    this.name = name;
-    this.sword = null;
-    this.shield = null;
+let Complex = function(real, imaginary) {
+    this.r = real;
+    this.i = imaginary;
 }
 
-var hero = new Hero('Link');
-hero;
+Complex.prototype.isReal = function() {
+    return this.i === 0;
+}
+
+let c1 = new Complex(10, -1);
+c1.isReal();    // false
+```
+En este ejemplo estamos usando el operador _new_ para invocar a una función. Dicho operador cuando
+se aplica a funciones tiene varios efectos entre los cuales hay asignar el prototipo de la función
+como prototipo del objeto. Esto se parece mucho al uso de las clases (en efecto, las clases por "debajo" están
+implementadas usando este mecanismo). En este caso la llamada `c1.isReal()` funciona porque el prototipo
+del objeto c1 es el objeto Complex.prototype.
+
+Podemos realizar el mismo ejemplo sin el uso de _new_ (la flexibilidad de JavaScript es enorme en como se crean
+y se manipulan objetos):
+
+```js
+let Complex = function(real, imaginary) {
+    return {r: real, i: imaginary}
+}
+
+Complex.prototype.isReal = function() {
+    return this.i === 0;
+}
+
+let c1 = Complex(10, -1);
+Complex.isReal.apply(c1);       // false
 ```
 
-Si la función no devuelve nada, el **resultado del operador `new` será el
-nuevo objeto**. Esto automatiza el paso 5: no es necesario devolver el
-nuevo objeto, esta devolución se hace implícita al utilizar `new`.
+En este caso puedes ver como la función isReal se llama "como si fuese un método estático", pero
+usamos `apply` para asignar el valor de this dentro del método.
 
-Observa como quedaría el constructor de un objeto punto:
+Comparemos, ahora, como queda el código usando clases y usando funciones constructoras con new. El código
+con las funciones constructoras se encuentra en el original y es el siguiente:
 
 ```js
 function Point(x, y) {
     this.x = x;
     this.y = y;
 }
-```
 
-Y el del disparo:
-
-```js
 function Shot(position, velocity) {
     this._position = position;
     this._velocity = velocity;
@@ -992,14 +886,35 @@ function Shot(position, velocity) {
 Shot.prototype.advance = function () {
     this._position.y += this._velocity;
 };
-```
 
-Ahora crear los objetos será cuestión de usar `new`. Emplearemos además nuestro
-nuevo tipo punto (`Point`) para pasar la posición al disparo:
-
-```js
 var enemyShot = new Shot(new Point(15, 15), 2);
 var allyShot = new Shot(new Point(15, 585), -2);
+enemyShot !== allyShot;
+```
+
+El código usando clases es el que hemos visto antes, pero lo colocamos aquí por facilidad de comparación:
+
+```js
+class Point {
+    constructor(x,y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Shot {
+    constructor(position, velocity) {
+        this._position = position;
+        this._velocity = velocity;
+    }
+
+    advance() {
+        this._position.y += this._velocity;
+    }
+}
+
+let enemyShot = new Shot(new Point(15, 15), 2);
+let allyShot = new Shot(new Point(15, 585), -2);
 enemyShot !== allyShot;
 ```
 
@@ -1016,71 +931,77 @@ los enemigos y la nave protagonista de la lección anterior:
 Necesitaremos nuestros puntos y disparos:
 
 ```js
-function Point(x, y) {
-    this.x = x;
-    this.y = y;
+class Point {
+    constructor(x,y) {
+        this.x = x;
+        this.y = y;
+    }
 }
 
-function Shot(position, velocity) {
-    this._position = position;
-    this._velocity = velocity;
-}
+class Shot {
+    constructor(position, velocity) {
+        this._position = position;
+        this._velocity = velocity;
+    }
 
-Shot.prototype.advance = function () {
-    this._position.y += this._velocity;
-};
+    advance() {
+        this._position.y += this._velocity;
+    }
+}
 ```
 
 El constructor y los métodos de los enemigos podrían ser:
 
 ```js
-function Enemy(graphic, position, score) {
-    this._graphic = graphic;
-    this._currentDirection = 'right';
-    this._position = position;
-    this._score = score;
+class Enemy () {
+    constructor(graphic, position, score) {
+        this._graphic = graphic;
+        this._position = position;
+        this._score = score;
+        this._currentDirection = 'right';    
+    }
+
+    moveLeft() { this._position.x -= 2; }
+    moveRight() { this._position.x += 2; }
+    advance() { this._position.y += 2; }
+    shot() {
+        let firePosition = new Position(this._position.x, this._position.y + 10);
+        let shot = new Shot(firePosition, 2);
+        return shot;
+    }
 }
-
-Enemy.prototype.moveLeft = function () { this._position.x -= 2; };
-Enemy.prototype.moveRight = function () { this._position.x += 2; };
-Enemy.prototype.advance = function () { this._position.y += 2; };
-
-Enemy.prototype.shoot = function () {
-    var firePosition = new Position(this._position.x, this._position.y + 10);
-    var shot = new Shot(firePosition, 2);
-    return shot;
-};
 ```
 
 Y aquí la implementación de la nave aliada:
 
 ```js
-function Ally(position) {
-    this._graphic = 'ally.png';
-    this._position = position;
+class Ally {
+    constructor(position) {
+        this._graphic = 'ally.png';
+        this._position = position;
+    }
+    moveLeft () { this._position.x -= 2; }
+    moveRight () { this._position.x += 2; }
+    shoot () {
+        let firePosition = new Position(this._position.x, this._position.y - 10);
+        let shot = new Shot(firePosition, -2);
+        return shot;
+    }
 }
-
-Ally.prototype.moveLeft = function () { this._position.x -= 2; };
-Ally.prototype.moveRight = function () { this._position.x += 2; };
-
-Ally.prototype.shoot = function () {
-    var firePosition = new Position(this._position.x, this._position.y - 10);
-    var shot = new Shot(firePosition, -2);
-    return shot;
-};
 ```
 
 Ahora podemos generalizar y pensar en un constructor que capture las propiedades
 comunes de ambos tipos:
 
 ```js
-function Ship(graphic, position) {
-    this._graphic = graphic;
-    this._position = position;
+class Ship {
+    constructor(graphic, position) {
+        this._graphic = graphic;
+        this._position = position;
+    }
+    moveLeft () { this._position.x -= 2; }
+    moveRight () { this._position.x += 2; }
 }
-
-Ship.prototype.moveLeft = function () { this._position.x -= 2; };
-Ship.prototype.moveRight = function () { this._position.x += 2; };
 ```
 
 En este caso, probablemente sea mejor no incluir el método de disparar
@@ -1090,109 +1011,65 @@ aliada.
 
 ![Jerarquía de constructores](images/space-invaders-hierarchy-constructor.png)
 
-Recuerda que ahora los constructores de la nave aliada y los enemigos pedirán
-primero al constructor de nave que cree una nave y luego la personalizarán.
+Ahora podemos usar la pabra clave `extends` para indicar una relación entre clases
+y dejar que JavaScript cree la cadena de prototipos correcta:
 
 ```js
-function Enemy(graphic, position, score) {
-    Ship.apply(this, [graphic, position]);
-    this._currentDirection = 'right';
-    this._score = score;
+class Enemy extends Ship {
+    constructor(graphic, position, score) {
+        super(graphic, position);
+        this._currentDirection = 'right';
+        this._score = score;
+    }
+    advance() { this._position.y += 2; }
+    shot() {
+        let firePosition = new Position(this._position.x, this._position.y + 10);
+        let shot = new Shot(firePosition, 2);
+        return shot;
+    } 
 }
 
-function Ally(position) {
-    Ship.apply(this, ['ally.png', position]);
+class Ally extends Ship {
+    constructor(position) {
+        super('ally.png', position);
+    }
+    shoot () {
+        let firePosition = new Position(this._position.x, this._position.y - 10);
+        let shot = new Shot(firePosition, -2);
+        return shot;
+    }
 }
 ```
 
-Con [`apply`](
-https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Function/apply)
-se puede ejecutar una función indicando cuál será su objeto de contexto y sus
-parámetros.
+Observa el uso de la palabra clave `super` para llamar al constructor de la clase base. Acostúmate
+a hacerlo siempre (hay ciertos casos en que puede no ser necesario, pero quedan fuera del alcance de
+este libro).
 
-Con la configuración anterior, las nuevas instancias de enemigos y aliados
-pasarán primero por el constructor de `Ship`, que establecerá los **atributos
-comunes** y luego estas instancias serán modificados cada una por el constructor
-pertinente para convertirse en enemigos o en aliados.
-
-En cuanto a la API, lo ideal sería contar con una cadena de prototipos de la siguiente manera:
-
--  Los atributos del enemigo (o del aliado) están en la propia instancia.
-
--  La API específica del tipo `Enemy` or `Ally` están en la propiedad
-`prototype` del constructor de ese tipo.
-
-- La API común a los tipos `Enemy` y `Ally` está en la propiedad `prototype` del
-constructor `Ship`.
-
-```
-var enemy = new Enemy()             Enemy.prototype      Ship.prototype
-{ _position: ..., _score: ... } --> { advance: ... } --> { moveLeft: ... }
-enemy._score -----↑                   ↑                    ↑
-enemy.advance ------------------------|                    |
-enemy.moveLeft --------------------------------------------|
-```
-
-Como ocurría con el ejemplo en la sección anterior, hay que crear la cadena
-desde atrás hacia adelante. El enlace entre las instancias y los
-constructores nos lo proporciona JavaScript al utilizar `new`, pero el enlace
-entre la propiedad `prototype` de `Enemy` y la de `Ship` **hay que que
-establecerlo manualmente**.
-
-Prueba lo siguiente:
+Dado el siguiente código:
 
 ```js
-// Inspecciona el prototype de Enemy.
-Enemy.prototype;
-
-// Enlaza ambas propiedades prototype.
-Enemy.prototype = Object.create(Ship.prototype);
-
-// Inspecciona la propiedad prototype otra vez y busca diferencias.
-Enemy.prototype;
-
-// Corrige la propiedad constructor.
-Enemy.prototype.constructor = Enemy;
-
-// Añade el método específico del tipo Enemy.
-Enemy.prototype.advance = function () {
-    this._position.y += 2;
-};
-
-// Otro método específico.
-Enemy.prototype.shoot = function () {
-    var firePosition = new Point(this._position.x, this._position.y + 10);
-    var shot = new Shot(firePosition, 2);
-    return shot;
-};
+let e1 = new Enemy('alien.png', new Point(10,10), 100);
 ```
 
-Y para el tipo `Ally`:
+La cadena de prototipos es la siguiente:
+
+-  El prototipo del objeto e1 es Enemy.prototype
+-  El prototipo del objeto Enemy.prototype es Ship.prototype
 
 ```js
-// Lo mismo para el aliado.
-Ally.prototype = Object.create(Ship.prototype);
-Ally.prototype.constructor = Ally;
+let e1 = new Enemy('alien.png', new Point(10,10), 100);
+let e2 = new Enemy('alien.png', new Point(20,20), 100);
 
-Ally.prototype.shoot = function () {
-    var firePosition = new Point(this._position.x, this._position.y - 10);
-    var shot = new Shot(firePosition, -2);
-    return shot;
-};
+Object.getPrototypeOf(e1) === Object.getPrototypeOf(e2);        // true
+Object.getPrototypeOf(e1) === Enemy.prototype;      // true
+Object.getPrototypeOf(Object.getPrototypeOf(e1)) === Ship.prototype;    // true
+Object.getPrototypeOf(Object.getPrototypeOf(e2)) === Ship.prototype;    // true
 ```
 
-Ahora sí, ya podemos crear un enemigo y un aliado usando sus constructores:
-
-```js
-var enemy = new Enemy('enemy1.png', new Point(10, 10), 40);
-var ally = new Ally(new Point(10, 590));
-
-Object.getPrototypeOf(ally) === Ally.prototype;
-Object.getPrototypeOf(enemy) === Enemy.prototype;
-Ally.prototype !== Enemy.prototype;
-Object.getPrototypeOf(Ally.prototype) === Object.getPrototypeOf(Enemy.prototype);
-Object.getPrototypeOf(Ally.prototype) === Ship.prototype;
-```
+Así si llamamos al método `e1.moveLeft()` dicho método será buscado en el objeto e1, donde
+no se encuentra. Por consiguiente se buscará en su prototipo (Enemy.prototype) que tampoco
+contiene el método. Por lo tanto se buscará en el prototipo de Enemy.prototype que es Ship.prototype
+que sí que contiene el método. 
 
 También podemos comprobar dónde está cada propiedad:
 
@@ -1261,9 +1138,11 @@ La cita se refiere a que más que comprobar si algo es una instancia de un
 tipo, se debería comprobar si tiene la funcionalidad que es necesaria.
 
 JavaScript es tan dinámico que el operador `instanceof` y la propiedad
-`constructor` sólo tienen sentido si se siguen las convenciones que acabamos de ver.
+`constructor` no siempre tienen sentido. Ahora bien, **si usas clases y las relaciones
+de herencia usando extends** entonces el significado de `instanceof` y
+`constructor` es el que hemos visto.
 
 Nada nos impide borrar la propiedad `constructor` de un prototipo o
 sobreescribirla en un objeto determinado. De hecho, en las nuevas versiones de
 JavaScript, el prototipo de un objeto puede cambiar después de que el objeto
-haya sido construido.
+haya sido construido (aunque no se recomienda hacerlo debido a temas de rendimiento).

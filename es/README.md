@@ -1,3 +1,34 @@
+# Un preámbulo importante
+
+Esta es la en EcmaScript 2015 versión del libro 'JavaScript para el desarrollo de videojuegos' que 
+[puedes leer aquí](https://mozdevs.github.io/js-for-gamedev/es/).
+
+**Todo el credito es para sus autores originales**. El libro original está escrito en EcmaScript 5, y
+personalmente creo que no está de más una versión en EcmaScript 2015 del mismo.
+
+**Nota:**. Todo el código ha sido probado en las últimas versiones de los navegades _evergreen_ (Chrome y
+Firefox) así con Node 6.4.0. En estos entornos todo el código se puede ejecutar tal cual sin necesitar
+de ningún transpilador (como [Babel](https://babeljs.io/)). **El soporte para EcmaScript 2015 está 
+muy avanzado en los últimos navegadores y en las últimas versiones de Node** y cada vez hay menos motivos
+para no usar esta versión del lenguaje que incorpora sustanciales novedades.
+
+También quiero recalcar que **solo se mencionan los aspectos de EcmaScript 2015 que funcionan hoy en día
+en los entornos mencionados**. Hay aspectos del lenguaje todavía no soportados (en especial el sistema
+de módulos) que no están implementados en ningún navegador (ni en Node) a día de hoy. Cualquier aspecto 
+de EcmaScript 2015 no soportado, no se menciona. Esta versión no pretende ser un curso completo de EcmaScript 2015,
+si no solo la adaptación del libro original. En aquellos casos en que un aspecto de EcmaScript 2015 no sea soportado
+se seguirá usando su equivalente EcmaScript 5.
+
+**Esta versión no quiere sustituír al original si no complementarlo**. En general se ha adaptado todo el código a EcmaScript 2015
+y, salvo excepciones, **no se muestra el código original EcmaScript 5**. También hay secciones del original que se
+han suprimido, no porque no sean interesantes, si no porque están fuera de contexto en EcmaScript 2015. Como digo,
+la intención es complementar al original. De hecho es muy buena idea leer ambos al mismo texto y así poder comparar
+el código (y la teoría) de EcmaScript 5 y la versión 2015.
+
+Por último, recalco lo dicho anteriormente: **todo el mérito del libro es para sus autores originales** que han tenido
+a bien compartir dicho material. Por supuesto todas las partes teóricas del libro se han dejado tal cual. Solo se ha migrado
+el código y las explicaciones sobre JavaScript para usar la versión 2015.
+
 # JavaScript para el desarrollo de videojuegos
 
 Esta es una guía de introducción a **JavaScript**, y está orientada al

@@ -6,6 +6,11 @@ estarán en un futuro.
 
 ## Ámbito y _hoisting_
 
+**Nota:** Hay sustanciales cambios en EcmaScript 2015 en este punto. En concreto el uso
+de `var` no tiene mucho sentido debiéndose usar `let` o `const` en su lugar. En esta
+versión **no se usa var en ningún momento** y todas las explicaciones referentes a
+ámbito y _hoisting_ aplican a let y a const. 
+
 Como en muchos lenguajes, los nombres de las variables pueden reutilizarse y
 guardar valores distintos, siempre y cuando se encuentren en **ámbitos
 distintos**.
@@ -14,25 +19,41 @@ El ámbito o _scope_ de una variable es la porción de código donde puede ser
 utilizada. Variables con el mismo nombre en ámbitos distintos son variables
 distintas.
 
-El ámbito en JavaScript es el **cuerpo de la función**, delimitado entre el
-par de llaves `{` y `}` que siguen a la lista de parámetros de la función.
+El ámbito en JavaScript es el **bloque donde se declara**, delimitado entre el
+par de llaves `{` y `}`. El cuerpo de una función es un bloque por si mismo.
 
 ```js
 function introduction() {
     // Esta es la variable text.
-    var text = 'I\'m Ziltoid, the Omniscient.';
+    let text = 'I\'m Ziltoid, the Omniscient.';
     greetings();
     console.log(text);
 }
 
 function greetings(list) {
     // Y esta es otra variable text DISTINTA.
-    var text = 'Greetings humans!';
+    let text = 'Greetings humans!';
     console.log(text);
 }
 
 introduction();
 ```
+
+En cualquier momento podemos crear un bloque usando un par de llaves:
+
+```js
+function greetings() {
+    let text =' I\'m Ziltoid, the Omniscient.';
+    {
+        let text='Greetings humans";
+        console.log(text);
+    }
+    console.log(text);
+}
+```
+
+**Nota:** Ten presente que las llaves de un `if`, `else`, `while` o `for` crean un ámbito nuevo,
+con lo que p. ej. las variables declaradas dentro de un if, no son visibles fuera de él.
 
 En JavaScript, las funciones pueden definirse dentro de otras funciones y, de
 esta forma, anidar ámbitos.
@@ -51,19 +72,18 @@ function getEven(list) {
 getEven([1, 2, 3, 4, 5, 6]);
 ```
 
-Como el ámbito es el de la función, el mismo nombre en una función anidada se
-puede referir a dos cosas:
+El mismo nombre en una función anidada se puede referir a dos cosas:
 
-1) **Si se usa con `var`**, se estará declarando **otra variable distinta**:
+1) **Si se usa con `let`**, se estará declarando **otra variable distinta**:
 
 ```js
 function introduction() {
     // Esta es una variable text.
-    var text = 'I\'m Ziltoid, the Omniscient.';
+    let text = 'I\'m Ziltoid, the Omniscient.';
 
-    function greetings(list) {
+    function greetings() {
         // Y esta es OTRA variable text distinta.
-        var text = 'Greetings humans!';
+        let text = 'Greetings humans!';
         console.log(text);
     }
 
@@ -78,17 +98,18 @@ En el caso anterior, decimos que la variable `text` de la función anidada
 `greetings` _oculta_ a la variable `text` de la función `introduction`.
 
 Recuerda que para introducir una nueva variable hay que declararla con
-`var` antes de usarla (o al mismo tiempo que se asigna).
+`let` antes de usarla (o al mismo tiempo que se asigna).
 
-2) Si se omite la palabra `var`, no se crea una nueva variable, sino que se
-**reutiliza** la que ya existía.
+2) Si se omite la palabra `let`, no se crea una nueva variable, sino que se
+**reutiliza** la que ya existía. En este caso la función interna (_greetings_)
+actúa como una _clausura_.
 
 ```js
 function introduction() {
   // Esta es una variable text.
-  var text = 'I\'m Ziltoid, the Omniscient.';
+  let text = 'I\'m Ziltoid, the Omniscient.';
 
-  function greetings(list) {
+  function greetings() {
     // Esta es la MISMA variable text que la de afuera.
     text = 'Greetings humans!';
     console.log(text);
@@ -101,67 +122,65 @@ function introduction() {
 introduction();
 ```
 
+A diferencia de `var` una variable declarada con `let` no puede volver a declararse. El siguiente
+código error:
+
+```js
+let a = 10;
+let a = 20;     // Error: a ya ha sido declarada
+```
+
+(Por supuesto, tal y como se ha visto antes, solo es error si la redeclaración es en el mismo ámbito. Si es en ámbitos distintos
+no hay redeclaración ya que son variables distintas).
+
+### constantes
+
+**Nota:** Esta sección no está en el original, puesto que es exclusiva de EcmaScript 2015
+
+JavaScript permite la declaración de constantes mediante la palabra clave `const`. Debe tenerse presente que una constante no significa
+un valor inmutable si no una variable que no puede ser reasignada:
+
+```js
+const pi = 3.14159;
+pi = 3.1416;            // Error: no se puede asignar por segunda vez una constante
+const m = {pi: 3.14159};
+m.pi = 3.1416;          // Correcto (m no se ha reasignado en ningún momento.)
+m = {pi: 3.1416};       // Error: no se puede asignar por segunda vez una constante
+```
+
+Así pues `const` no significa "valores inmutables" si no variables que solo pueden ser asignadas una vez. Es importante
+tenerlo presente para evitar errores. Este hecho también implica que `const` tenga un uso mucho más amplio: de hecho
+**cualquier variable que solo asignes una vez deberías declararla con const** para explicitar este hecho. Solo deberías usar
+`let` si vas a asignar la variable más de una vez. En resúmen las normas serían:
+
+- Usa `const` siempre que sea posible
+- Usa `let` si y solo si debes asignar la variable más de una vez.
+- No uses `var` nunca.
+
+A nivel de visibilidad `const` sigue las mismas reglas que `let`.
+
 ### _Hoisting_
 
 _Hoisting_ significa "elevación", y en el contexto de la programación nos
 referimos a un mecanismo que emplean algunos lenguajes respecto a la declaración
 de nombres.
 
-En JavaScript da igual en qué punto de la función se declara una variable.
-JavaScript asumirá cualquier declaración como si ocurriese al comienzo de
-la función.
+En JavaScript antes de EcmaSctript 2015 daba igual en qué punto de la función se declara una variable.
+JavaScript asumirá cualquier declaración como si ocurriese al comienzo de la función. Eso cambia en
+EcmaScript 2015 y la introducción de `let`. Una variable declarada con `let` no existe hasta el momento de su
+declración.
 
-Es decir que esto:
-
-```js
-function f() {
-    for (var i = 0; i < 10; i++) {
-        for (var j = 0; j < 10; j++) {
-            console.log('i: ', i, ' j: ', j);
-        }
-    }
-}
-```
-
-Es equivalente a esto:
-
-```js
-function f() {
-    var i;
-    var j;
-    for (i = 0; i < 10; i++) {
-        for (j = 0; j < 10; j++) {
-            console.log('i: ', i, ' j: ', j);
-        }
-    }
-}
-```
-
-Fíjate que JavaScript **_alza_ la declaración** de la variable (la lleva al
-principio), no la inicialización. Es por eso que el siguiente código no falla,
-pero imprime `undefined`:
+Así por lo tanto el siguiente código **falla por intentar acceder a una variable no definieda**:
 
 ```js
 function f() {
     console.log(i);
-    var i = 5;
+    let i = 5;
 }
 f();
 ```
 
-En **modo estricto**, usar una variable que no ha sido declarada produce
-un error.
-
-```js
-function f() {
-    console.log(i);
-    i = 5;
-}
-f();
-```
-
-Con las **declaraciones de funciones** esto no pasa: cuando una declaración de
-función se alza, se alza entera, _definición incluida_.
+Por otra parte, las **declaraciones de funciones** sí que se alzan y se alzan enteras (_definición incluida_).
 
 ```js
 function getEven(list) {
@@ -198,8 +217,25 @@ Nótese que para que esta manera de escribir código sea clara, el nombre que
 utilicemos en las funciones auxiliares tiene que ser adecuado, descriptivo, y
 dar una pista sobre cuál es el valor de retorno.
 
+Ahora bien, si declaras la función de forma anónima y la asignas a una variable,
+entonces dicha declaración no es alzada. Recuerda: no hay _hoisting_ en las declaraciones
+de variables (Y no, usar `var` no ayuda en nada, porque entonces la variable `isEven` existe
+pero vale `undefined` en el momento en que se ejecuta el `list.filter`. No hay razón alguna
+en EcmaScript 2015 para usar `var`.)
 
-## _Closures_
+```js
+function getEven(list) {
+    return list.filter(isEven);
+
+    const isEven = function(n) {
+        return n % 2 === 0;
+    }
+}
+
+getEven([1, 2, 3, 4, 5, 6]);
+```
+
+## _Closures_ (Clausuras)
 
 Las funciones son datos y se crean cada vez que se encuentra una instrucción
 `function`. De esta forma, podemos crear una función que devuelva funciones.
@@ -209,8 +245,8 @@ function buildFunction() {
     return function () { return 42; };
 }
 
-var f = buildFunction();
-var g = buildFunction();
+let f = buildFunction();
+let g = buildFunction();
 
 typeof f === 'function';
 typeof g === 'function';
@@ -231,8 +267,8 @@ function newDie(sides) {
     return Math.floor(Math.random() * sides) + 1;
   };
 }
-var d100 = newDie(100);
-var d20 = newDie(20);
+let d100 = newDie(100);
+let d20 = newDie(20);
 
 d100 !== d20; // distintas, creadas en dos llamadas distintas a newDie.
 
@@ -252,12 +288,12 @@ mensaje.
 Considera el siguiente ejemplo:
 
 ```js
-var diceUtils = {
+let diceUtils = {
     history: [], // lleva el histórico de tiradas.
 
     newDie: function (sides) {
         return function die() {
-            var result = Math.floor(Math.random() * sides) + 1;
+            let result = Math.floor(Math.random() * sides) + 1;
             this.history.push([new Date(), sides, result]);
             return result;
         }
@@ -294,11 +330,11 @@ Puedes lograr esto de dos maneras. La primera es un mero juego de variables,
 guardando el `this` en una variable auxiliar (en este caso, `self`):
 
 ```js
-var diceUtils = {
+let diceUtils = {
     history: [], // Lleva el histórico de dados.
 
     newDie: function (sides) {
-        var self = this; // self es ahora el destinatario de newDie.
+        let self = this; // self es ahora el destinatario de newDie.
 
         return function die() {
             var result = Math.floor(Math.random() * sides) + 1;
@@ -313,8 +349,8 @@ var diceUtils = {
 Esto sí funciona y es mucho más conveniente:
 
 ```js
-var d10 = diceUtils.newDie(10);
-var d6 = diceUtils.newDie(6);
+let d10 = diceUtils.newDie(10);
+let d6 = diceUtils.newDie(6);
 d10();
 d6();
 d10();
@@ -327,7 +363,7 @@ El método `bind` de una función devuelve otra función cuyo `this` será el
 primer parámetro de `bind`. De este modo:
 
 ```js
-var diceUtils = {
+let diceUtils = {
     history: [], // Lleva el histórico de dados.
 
     newDie: function (sides) {
@@ -335,7 +371,7 @@ var diceUtils = {
                                // destinatario establecido al primer parámetro.
 
         function die() {
-            var result = Math.floor(Math.random() * sides) + 1;
+            let result = Math.floor(Math.random() * sides) + 1;
             this.history.push([new Date(), sides, result]);
             return result;
         }
@@ -347,12 +383,12 @@ Las dos formas son ampliamente utilizadas, pero la segunda se ve escrita
 muchas veces de este modo:
 
 ```js
-var diceUtils = {
+let diceUtils = {
     history: [], // Lleva el histórico de dados.
 
     newDie: function (sides) {
         return function die() {
-            var result = Math.floor(Math.random() * sides) + 1;
+            let result = Math.floor(Math.random() * sides) + 1;
             this.history.push([new Date(), sides, result]);
             return result;
         }.bind(this); // el bind sigue a la expresión de función.
@@ -360,9 +396,159 @@ var diceUtils = {
 }
 ```
 
+### Funciones arrow (fat arrow, lambda expressions)
+
+**Nota:** Esta sección no está en el original dado que es propia de EcmaScript 2015
+
+Lo que has visto en la sección anterior (el comportamiento de `this` dentro de una clausura) se conoce 
+comúnmente con el nombre de "el problema de la pérdida de this". Las dos soluciones mostradas anteriormente
+funcionan correctamente, pero en EcmaScript 2015 hay un tercera solución mucho mejor: el operador _fat arrow_.
+
+Dicho operador **es una sintaxis alternativa a la declaración de funciones**. Veamos primero su uso y luego analizamos
+porque es una solución a la pérdida de this. Hemos visto que podemos declarar una función anónima y asignarla a una variable
+de forma muy sencilla:
+
+```js
+const random = function() { return 42;}
+```
+
+EcmaScript 2015 nos da una sintaxis alternativa equivalente pero mucho más compacta:
+
+```
+const random = () => 42;
+```
+
+Visto así parecen ganaas de complicar el código, pero veamos un uso donde el operador _fat arrow_ mejora realmente el código. En JavaScript
+es habitual pasar funciones como parámetros de otras funciones. Sin ir más lejos el código mostrado anteriormente:
+
+```js
+function getEven(list) {
+    return list.filter(isEven);
+
+    const isEven = function(n) {
+        return n % 2 === 0;
+    }
+}
+```
+
+Este código es correcto, pero no es muy realista. No tiene mucho sentido declarar una función con nombre (`isEven`) que solo se usa una vez. Lo
+habitual es pasar una función anónima como segundo parámetro de list.filter:
+
+```js
+function getEven(list) {
+    return list.filter(function(n) {
+        return n % 2 === 0;
+    });
+}
+```
+
+Acostúmbrate a este tipo de código porque es constante en el desarrollo en JavaScript. Ahora bien, es un código un poco tedioso (_verbose_). No solo
+hay que escribir mucho si no que el código cuesta más de leer. Hasta EcmaScript 2015 poco se podía hacer. Pero
+ahora tenemos al operador _fat arrow_ de nuestro lado. Compara:
+
+```js
+function getEven(list) {
+    return list.filter(n => n % 2 === 0);
+}
+```
+
+La diferencia en la claridad es abismal. Quizá te cueste acostumbrarte a la sintaxis del _fat arrow_ pero cuando lo hagas
+te preguntarás por qué ha tardado tanto tiempo en incorporarse al lenguaje.
+
+A continuación se muestran declaraciones de funciones del modo tradicional y usando el _fat arrow_ para que veas
+las diferencias:
+
+```js
+const f1a = function() { return 42;}
+const f1b = () => 42;
+const f2a = function(min, max) { return max-min};
+const f2b = (min, max) => max-min;
+const f3a = function(min) { return min + 42};
+const f3b = min => min + 42;        // Con un solo parámetro el parentesis es opcional
+const f4a = function(iters) {
+    let accum = 0;
+    for (let idx=0; idx<iters; idx++) { accum += idx;}
+    return accum
+}
+const f4b = iters => {
+    let accum = 0;
+    for (let idx=0; idx<iters; idx++) { accum += idx;}
+    return accum
+}
+```
+
+Si la función **consta solo de un return _expresion_** entonces el operador _fat arrow_ simplifica mucho la sintaxis. Si la
+función tiene más de una sentencia, entonces la ganancia es menor. De todos modos, hay muchas funciones que lo único que hacen
+es devolver un determinado valor.
+
+Pero el operador _fat arrow_ viene con un regalo adicional: **una función declarada con _fat arrow_ preserva el valor de this**. Es 
+decir, ya no tenemos el problema de la pérdida de this:
+
+```js
+let diceUtils = {
+    history: [], // Lleva el histórico de dados.
+
+    newDie: function (sides) {
+        return () => {
+            let result = Math.floor(Math.random() * sides) + 1;
+            this.history.push([new Date(), sides, result]);
+            return result;
+        }
+    }
+}
+```
+
+Observa como la función anónima no debe usar ni `apply`, ni `bind` ni debemos declarar la variable `self`: el uso
+de _fat arrow_ nos garantiza que dentro de la función anónima el valor de this será el mismo que el valor de la función
+que la contenga (en este caso, la función newDie).
+
+### Estado privado 
+
+**Nota**: Esta sección no está en el original. Se añade para completitud.
+
+Anteriormente dijimos que no hay manera en JavaScript de tener campos privados en un objeto. Bien,
+aprovechando las clausuras es posible tener un estado privado **real**:
+
+```js
+const enemy = (function() {
+    const _position = {x: 10, y: 10};
+    return {
+        position() {
+            return {x: _position.x, y: _position.y}
+        }
+    }
+})();
+
+let pos = enemy.position().x;       // 10
+let pos = enemy._position.x;        // Error (enemy._position es undefined)
+```
+
+Este código crea una _clausura_ (la función _position()_). La función 
+_position_ está definda dentro de otra función y por lo tanto puede acceder a las variables
+definidas dentro de esta otra función. Dicha otra función es una función anónima. Se dice que una
+función es anónima cuando no tiene un nombre. Con las funciones anónimas solo puede hacerse dos
+cosas: o invocarlas y guardarse el resultado (es decir declarar e invocar la función todo en uno)
+o bien asignarla a una variable:
+
+```js
+const func = function() {return 42;}  // Asigna la función anónima a la variable func
+const i42 = (function() { return 42;})();  // Crea la función anónima Y la invoca. El resultado (42) se guarda en i42.
+```
+
+El valor de la variable _enemy_ es el valor de invocar la función anónima. Dicho resultado es un objeto que contiene la interfaz
+pública (la función _position()_). Debido a que las funciones que conforman la interfaz pública son clausuras, pueden acceder
+a las variables de la función anónima (que son inacessibles desde fuera).
+
+En este ejemplo la interfaz pública tiene la forma de funciones (_position()_ en lugar de _position_). Más adelanta veremos como
+podemos mantener un estado privado a la vez que mantenemos la ilusión de propiedades.
+
 ## Módulos
 
 Esta sección presenta la característica **módulos**, que es específica de Node.
+
+**Nota:** EcmaScript 2015 define un sistema de módulos extremadamente potente y flexible. Lamentablemente no está
+implementado en ningún motor, por lo que esta sección es la misma que el original y describe el sistema de módulos
+_CommonJS_ (de Node).
 
 Una de las principales desventajas de JavaScript ([hasta la próxima versión](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/import))
 es que no hay forma de organizar el código en módulos.
@@ -625,8 +811,8 @@ Este es un ejemplo de la opción 3 –el cual aprovechamos para repasar la
 herencia:
 
 ```js
-var events = require('events');
-var EventEmitter = events.EventEmitter;
+const events = require('events');
+const EventEmitter = events.EventEmitter;
 
 function Ship() {
     EventEmitter.apply(this);
@@ -636,9 +822,28 @@ function Ship() {
 Ship.prototype = Object.create(EventEmitter.prototype);
 Ship.prototype.constructor = Nave;
 
-var ship = new Ship();
+let ship = new Ship();
 ship.on; // ¡existe!
 ```
+
+Debido a la correspondencia entre clases y funciones (recuerda, las clases terminan siendo
+realmente funciones) el siguiente código funciona correctamente:
+
+```js
+const events = require('events');
+const EventEmitter = events.EventEmitter;
+
+class Ship extends EventEmitter {
+    constructor() {
+        super();
+        this._ammunition = 'laser charges';
+    }
+}
+
+let ship = new Ship();
+ship.on; // ¡existe!
+```
+
 
 Ahora que la nave puede emitir eventos, vamos a hacer que dispare y que emita un
 evento.
@@ -649,6 +854,31 @@ Ship.prototype.shoot = function () {
     this.emit('shoot', this._ammunition); // parte de la API de EventEmitter.
 };
 
+ship.on('shoot', function (ammunition) {
+    console.log('CENTRO DE MANDO. La nave ha disparado:', ammunition);
+});
+
+ship.shoot();
+```
+
+Si usamos clases recuerda que los métodos se suelen declarar junto con la clase
+(aunque añadirlos a `Ship.prototype` funciona igualmente. Esa es la gracia de como
+están implementadas las clases):
+
+```js
+class Ship extends EventEmitter {
+    constructor() {
+        super();
+        this._ammunition = 'laser charges';
+    }
+
+    shoot() {
+        console.log('PICHIUM!');
+        this.emit('shoot', this._ammunition); // parte de la API de EventEmitter.
+    }
+}
+
+let ship = new Ship();
 ship.on('shoot', function (ammunition) {
     console.log('CENTRO DE MANDO. La nave ha disparado:', ammunition);
 });

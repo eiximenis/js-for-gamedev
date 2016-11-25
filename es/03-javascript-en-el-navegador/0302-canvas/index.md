@@ -38,7 +38,7 @@ Para realizar cualquier operación de pintado, necesitamos obtener un **contexto
 Ejemplo:
 
 ```javascript
-var ctx = document.querySelector('canvas').getContext('2d');
+let ctx = document.querySelector('canvas').getContext('2d');
 ctx.fillRect(10, 10, 100, 100);
 ```
 
@@ -85,8 +85,8 @@ Ejemplo:
 
 ```javascript
 window.onload = function () {
-    var img = document.getElementById('kitten');
-    var ctx = document.querySelector('canvas')
+    let img = document.getElementById('kitten');
+    let ctx = document.querySelector('canvas')
         .getContext('2d');
 
     ctx.drawImage(img, 0, 0);
@@ -114,7 +114,7 @@ Los pasos a seguir para cargar una imagen de esta manera serían:
 
 ```javascript
 window.onload = function () {
-    var img = new Image();
+    let img = new Image();
     img.addEventListener('load', function () {
         ctx.drawImage(img, 0, 0);
     });
@@ -233,10 +233,10 @@ Ejemplo:
 
 ```javascript
 const SPEED = 60; // pixels per second
-var oldTimestamp = 0;
+let oldTimestamp = 0;
 
 function render(timestamp) {
-  var delta = (timestamp - oldTimestamp) / 1000.0;
+  let delta = (timestamp - oldTimestamp) / 1000.0;
   oldTimestamp = timestamp;
 
   // ...

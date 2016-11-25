@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "styles": "mkdirp ./es/styles && cpr styles/website.css es/styles/ -o",
+    "styles": "mkdirp ./es/styles && cpr styles/website.css es/styles/website.css -o",
     "serve:es": "npm run styles && gitbook serve ./es",
     "zip": "node scripts/generate-zips.js",
     "ebook:es": "mkdirp dist/es/ebook && npm run ebook:es:pdf && npm run ebook:es:epub",

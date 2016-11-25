@@ -7,6 +7,7 @@ var fs = require('fs');
 // add here all the dirs that will be zipped
 const dirs = [
     'es/02-javascript/02-practica/start-here',
+    'es/02-javascript/02-practica/start-here-es2015',
     'es/03-javascript-en-el-navegador/03-practica/start-here'
 ];
 

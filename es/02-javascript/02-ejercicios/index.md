@@ -10,7 +10,7 @@ contexto. Por ejemplo, el `0` es considerado `false` y cualquier número distint
 de `0` es `true`:
 
 ```js
-var v = 0; // después de esta prueba, cambia el valor de v por otro número.
+let v = 0; // después de esta prueba, cambia el valor de v por otro número.
 !!v; // la doble negación al comienzo lo convierte en booleano.
 ```
 
@@ -25,14 +25,14 @@ dejamos de evaluar. Por ejemplo, ¿qué crees que le pasará a la siguiente
 expressión?
 
 ```js
-var hero = { name: 'Link', weapon: null };
+let hero = { name: 'Link', weapon: null };
 console.log('Hero weapon power is:', hero.weapon.power);
 ```
 
 Pero, ¿y ahora?
 
 ```js
-var hero = { name: 'Link', weapon: null };
+let hero = { name: 'Link', weapon: null };
 if (hero.weapon && hero.weapon.power) {
   console.log('Hero weapon power is:', hero.weapon.power);
 } else {
@@ -55,7 +55,7 @@ expresión. Con esto en cuenta, trata de predecir el resultado de las siguientes
 expresiones:
 
 ```js
-var v;
+let v;
 function noop() { return; };
 
 1 && true && { name: 'Link' };
@@ -72,9 +72,9 @@ omitidos tienen el valor especial `undefined` que es falso.
 
 ```js
 function pad(target, targetLength, fill) {
-  var result = target.toString();
-  var targetLength = targetLength || result.length + 1;
-  var fill = fill || '0';
+  let result = target.toString();
+  let targetLength = targetLength || result.length + 1;
+  let fill = fill || '0';
   while (result.length < targetLength) {
     result = fill + result;
   }
@@ -85,6 +85,19 @@ function pad(target, targetLength, fill) {
 pad(3);
 pad(2, 5);
 pad(2, 5, '*');
+```
+
+**Nota**: EcmaScript soporta ya parámetros por defecto por lo que no
+es necesario aplicar esa técnica (aunque, por supuesto, sigue funcionando):
+
+```js
+function pad(target, targetLength = target.toString().length + 1, fill = '0') {
+  let result = target.toString();
+  while (result.length < targetLength) {
+    result = fill + result;
+  }
+  return result;
+}
 ```
 
 **5. Buenas prácticas en el diseño de APIs.**
@@ -107,7 +120,7 @@ scale(p, 10);
 La implementación correcta sería:
 
 ```js
-var p = {
+let p = {
   _x: 5,
   _y: 5,
   getX: function () {
@@ -134,6 +147,25 @@ scale(p, 10);
 ```
 
 Pero reconócelo, escribir tanto es un rollo soberano.
+
+**Nota:** La solución propuesta arriba, **no esconde el estado privado** esconderlo implica usar clausuras. Además
+la sintaxis reducida de EcmaScript 2015 para definir funciones hace el código más sencillo:
+
+```js
+let p = (function() {
+  let _x = 5;
+  let _y = 5;
+
+  return {
+    getX() {return _x;},
+    setX(v) { _x = v;},
+    getY() { return _y;},
+    setY(v) {_y = v;},
+  }
+})();
+```
+
+En este caso `p._x` y `p._y` no son accesibles.
 
 **6. Propiedades computadas al rescate.**
 
@@ -198,6 +230,23 @@ function scale(point, factor) {
 scale(p, 10);
 ```
 
+**Nota:** Por supuesto podríamos usar clausuras para, de nuevo, ocultar el estado privado (las propiedades
+que empiezan por '_'):
+
+```js
+let p = (function() {
+  let _x = 5;
+  let _y = 5;
+
+  return {
+    get X() {return _x},
+    get Y() {return _y},
+    set X(v) { _x = v},
+    set Y(v) {_y = v}
+  }
+})();
+```
+
 ¿Se te ocurre la manera de hacer que una propiedad pueda ser de sólo lectura? Es
 decir, que su valor no pueda cambiarse (asumiendo que el usuario no accederá a
 las propiedades que comiencen por '_').
@@ -206,22 +255,22 @@ Si quisieras añadir una propiedad a un objeto ya existente tendrías que utiliz
 [Object.defineProperty()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty):
 
 ```js
-var point = {};
+let point = {};
 Object.defineProperty(point, '_x', { value: 5, writable: true });
 Object.defineProperty(point, '_y', { value: 5, writable: true });
 Object.defineProperty(point, 'x', {
-  get: function () {
+  get  () {
     return this._x;
   },
-  set: function (v) {
+  set (v) {
     this._x = v;
   }
 });
 Object.defineProperty(point, 'y', {
-  get: function () {
+  get () {
     return this._y;
   },
-  set: function (v) {
+  set (v) {
     this._y = v;
   }
 });
@@ -269,13 +318,13 @@ especialmente útil para acceder a propiedades de manera genérica. Por ejemplo,
 imagina el siguiente código:
 
 ```js
-var hero = {
+let hero = {
   name: 'Link',
   hp: 10,
   stamina: 10,
   weapon: { name: 'sword', effect: { hp: -2 } }
 };
-var enemy = {
+let enemy = {
   name: 'Ganondorf',
   hp: 20,
   stamina: 5,
@@ -294,7 +343,7 @@ function attack(character, target) {
 
 function applyEffect(effect, target) {
   // Obtiene los nombres de las propiedades del objeto. Búscalo en la MDN.
-  var propertyNames = Object.keys(effect);
+  let propertyNames = Object.keys(effect);
   for (var i = 0; i < propertyNames.length; i++) {
     var name = propertyNames[i];
     target[name] += effect[name];
@@ -312,6 +361,18 @@ attack(hero, enemy);
 no matarlo ni dañarlo? Intenta hacerlo sin reescribir el ejemplo entero, es
 decir, continuando desde el término del ejemplo.
 
+**Nota:** El ejemplo anterior se podría reescribir usando el bucle  `for..of`:
+
+```js
+function applyEffect(effect, target) {
+  // Obtiene los nombres de las propiedades del objeto. Búscalo en la MDN.
+  let propertyNames = Object.keys(effect);
+  for (let name of propertyNames) {
+    target[name] += effect[name];
+  }
+}
+```
+
 **9. Objetos como algo más que objetos.**
 
 Los objetos de JavaScript no solo sirven para modelar los objetos de la
@@ -321,11 +382,10 @@ un ejemplo clásico de la utilidad de un objeto JavaScript:
 
 ```js
 function wordHistogram(text) {
-  var wordList = text.split(' ');
-  var histogram = {};
-  for (var i = 0; i < wordList.length; i++) {
-    var word = wordList[i];
-    if (!histogram.hasOwnProperty(word)) {
+  let wordList = text.split(' ');
+  let histogram = {};
+  for (let word of wordList) {
+   if (!histogram.hasOwnProperty(word)) {
       histogram[word] = 0;
     }
     histogram[word]++;
@@ -342,6 +402,11 @@ _claves_.
 
 ¿Puedes pensar en al menos una aplicacion más?
 
+**Nota:** EcmaScript 2015 tiene el objeto `Map` pensado para ser usado en estos casos.
+La ventaja de `Map` respecto un objeto tradicional es que en un objeto tradicional
+las claves deben ser cadenas (los nombres de las propiedades). Usando un objeto `Map` las
+claves pueden ser de cualquier tipo (incluído claves que sean objetos).
+
 **10. Funciones como parámetros.**
 
 Las listas de JavaScript tiene algunos métodos que aceptan funciones como
@@ -352,8 +417,8 @@ van a recorrer **todos** los elementos de una lista.
 
 ```js
 function wordHistogram(text) {
-  var wordList = text.split(' ');
-  var histogram = {};
+  let wordList = text.split(' ');
+  let histogram = {};
   wordList.forEach(function (word) {
     if (!histogram.hasOwnProperty(word)) {
       histogram[word] = 0;
@@ -363,13 +428,15 @@ function wordHistogram(text) {
   return histogram;
 }
 
-var poem = 'Todo pasa y todo queda, ' +
+let poem = 'Todo pasa y todo queda, ' +
            'pero lo nuestro es pasar, ' +
            'pasar haciendo caminos, ' +
            'caminos sobre la mar';
 
 wordHistogram(poem);
 ```
+
+**Nota:** Usar `.forEach()` está bien... pero no te engañes: ¡un bucle `for..of` es mejor!
 
 El resultado no es correcto porque al separar las palabras por los espacios
 estás dejando caracteres que no forman palabras como parte de ellas. Puedes
@@ -379,8 +446,8 @@ para partir el texto por los límites de las palabras:
 
 ```js
 function wordHistogram(text) {
-  var wordList = text.split(/\b/); // Eso entre / / es una expresión regular.
-  var histogram = {};
+  let wordList = text.split(/\b/); // Eso entre / / es una expresión regular.
+  let histogram = {};
   wordList.forEach(function (word) {
     if (!histogram.hasOwnProperty(word)) {
       histogram[word] = 0;
@@ -390,7 +457,7 @@ function wordHistogram(text) {
   return histogram;
 }
 
-var poem = 'Todo pasa y todo queda, ' +
+let poem = 'Todo pasa y todo queda, ' +
            'pero lo nuestro es pasar, ' +
            'pasar haciendo caminos, ' +
            'caminos sobre la mar';
@@ -403,32 +470,30 @@ filtrar una lista con
 [`.filter()`](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/filter):
 
 ```js
-function isEven(n) { return n % 2 === 0; }
+const isEven = (n) =>  n % 2 === 0;
 [1, 2, 3, 4, 5, 6].filter(isEven);
 ```
 
 Y así quitar lo que no sean palabras:
 
 ```js
-function isWord(candidate) {
-  return /\w+/.test(candidate);
-}
+const isWord = (candidate) => return /\w+/.test(candidate);
 
 function wordHistogram(text) {
-  var wordList = text.split(/\b/);
+  let wordList = text.split(/\b/);
   wordList = wordList.filter(isWord);
-  var histogram = {};
+  let histogram = {};
 
-  wordList.forEach(function (word) {
+  for (let word of wordList) {
     if (!histogram.hasOwnProperty(word)) {
       histogram[word] = 0;
     }
     histogram[word]++;
-  });
+  }
   return histogram;
 }
 
-var poem = 'Todo pasa y todo queda, ' +
+let poem = 'Todo pasa y todo queda, ' +
            'pero lo nuestro es pasar, ' +
            'pasar haciendo caminos, ' +
            'caminos sobre la mar';
@@ -541,6 +606,34 @@ f(function () {}, [], undefined);
 Busca la información sobre `arguments` en la
 [MDN](http://lmgtfy.com/?q=mdn+arguments). ¡Te hará falta!
 
+**Nota:** Cualquier sección que hable de "número variable de argumentos" en el contexto de
+EcmaScript 2015 debe forzosamente hablar **de los parámetros rest**. Podemos declarar una
+función que acepte uno o más parámetros tradicionales y un "parámetro rest" que contiene un array
+"con el resto de parámetros":
+
+```js
+const add = function(a, b, ...r) {
+  let value = a+b;
+  foreach (let v of r) {value = value + r}
+  return value;
+}
+```
+
+La función `value` suma los dos primeros parámetros y luego si hay más los suma también.
+El parámetro `r` es el "parámetro rest" (nota los tres puntos delante) y contiene un array con
+todos los parámetros a partir del tercero.
+
+```js
+add(1,2); // a=1, b=2, r=[]
+add(1);   // a=1, b=undefined, r=[]
+add(1,2,3);   // a=1, b=2, r=[3]
+add(1,2,3,4,5,6);   // a=1, b=2, r=[3,4,5,6]
+```
+
+El uso de parámetros rest en lugar de arguments tiene varias ventajas: el parámetro rest contiene
+solo los argumentos "adicionales" (en lugar de todos) permitiendo una mayor claridad de código
+y además el valor es un "array de verdad" no un objeto como `arguments`.
+
 **12. Decoradores**
 
 Aparte de devolverse como parámetros, las funciones pueden ser devueltas desde
@@ -596,6 +689,57 @@ log1('Greetings', 'humans!');
 
 ¿Podrías decir qué hace cada línea en la función `newLog`?
 
+**Nota:** Observa que usando parámetros rest el código se simplifica. ¡EcmaScript 2015 está
+para ayudarte!
+
+```js
+function newLog(label) {
+  return function(...args) {
+    args.splice(0, 0, label + ':');
+    console.log.apply(console, args);
+  }
+}
+```
+
+**¡Y aún hay más!** Hay una característica potentísima de EcmaScript 2015 que nos va a permitir
+evitar ese `apply`. Este `apply` es necesario porque `args` es un array. Pero observa que si pudiesemos convertir
+los N valores del array a N parámetros podríamos llamar a la función `console.log` directamente.
+
+Pues precisamente EcmaScript 2015 tiene un operador que hace esto: el _operador spread_:
+
+```js
+function newLog(label) {
+  return function(...args) {
+    args.splice(0, 0, label + ':');
+    console.log (...args);
+  }
+}
+```
+
+Vale, no te pierdas con tantos `...`. El primer uso es un parámetro rest. Ya hemos visto que eso
+hace que `args` sea un array con el resto de parámetros de la función. Obviamente si una función
+solo tiene un parámetro rest, entonces este parámetro será un array con todos los parámetros pasados
+a la función.
+
+Ahora vayamos al `console.log`. En este caso `...args` no es un parámetro rest, ya que no estamos definiendo
+una función. En este caso se trata de aplicar el _operador spread_ al array `args`. El _operador spread_ es una
+de las características más potentes de EcmaScript 2015 y lo que hace es que una expresión (en este caso un array)
+sea extendida en aquellas situaciones donde se esperan múltiples argumentos. Esa explicación es un poco teórica,
+pero aplicada a nuestro caso significa que el array `args` se convierte a una lista de argumentos. ¡Parece
+magia negra!
+
+De hecho todas esas llamadas a `console.log` son equivalentes. Pero no negarás que (obviando la que tiene
+los parámetros fijados que está solo para referencia), la que usa el _operador spread_ es la más elegante de todas. No
+es necesario usar `apply` (el uso de `call` no tiene sentido en este contexto, pero se muestra por completitud).
+
+```js
+const a= ['a','b','c'];
+console.log('a', 'b', 'c');
+console.log(...a);
+console.log.apply(console, a);
+console.log.call(console, ...a);
+```
+
 **13. Asincronía y closures**
 
 Carga el siguiente código:
@@ -630,7 +774,7 @@ llamarse en un intervalo de tiempo. Pongamos cada segundo:
 var obj = {
   x: 10,
   y: 2,
-  advance: function () {
+  advance () {
     this.y += 2;
     console.log('Ahora Y vale', this.y);
   }
@@ -676,7 +820,7 @@ var d20 = die.bind(obj, 20);
 d20();
 ```
 
-La usarrás de esta otra forma:
+La usarás de esta otra forma:
 
 ```js
 function die(sides) {

@@ -1,4 +1,4 @@
-# El entorno de trabajo
+# El entorno de trabajo 
 
 ## La línea de comandos
 
@@ -45,7 +45,7 @@ aplicaciones en el lado del servidor y será en Node que aprenderemos JavaScript
 para enfatizar su independencia del navegador.
 
 Para realizar los ejercicios y prácticas propuestos en esta guía, recomendamos
-[instalar cualquier versión de Node 6](https://nodejs.org/en/).
+[instalar cualquier versión de Node >= 6.4.0](https://nodejs.org/en/).
 
 ## El editor de texto
 

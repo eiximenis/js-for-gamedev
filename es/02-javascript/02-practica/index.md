@@ -8,7 +8,15 @@ _Test Driven Development_ o desarrollo dirigido por tests.
 
 ## Instalación y tests
 
-**Descarga el <a href="start-here.zip" target="_blank">esqueleto inicial del proyecto</a>** y descomprímelo. En una consola, ve a la raíz del directorio del proyecto (donde se encuentra el archivo `package.json`) y ejecuta:
+**Nota:** Se incluye tanto la versión original de la práctica como una versión con EcmaScript2015. Simplemente parte del zip inicial que prefieras.
+El resto es todo igual para ambas versiones.
+
+Para la versión original: **Descarga el <a href="start-here.zip" target="_blank">esqueleto inicial del proyecto</a>** y descomprímelo.
+
+Para la versión EcmaScript 2015: **Descarga el <a href="start-here-es2015.zip" target="_blank">esqueleto inicial del proyecto</a>** y descomprímelo.
+
+
+En una consola, ve a la raíz del directorio del proyecto (donde se encuentra el archivo `package.json`) y ejecuta:
 
 ```js
 npm install
