@@ -764,6 +764,9 @@ scheduleTasks(5);
 necesitas la función [`.bind()`](
 https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind).
 
+**Nota:** ECMAScript 2015 te permite obtener mismo comportamiento que usando `bind` pero sin necesidad de usarla. En efecto
+el uso de `let` modifica el como una variable es capturada por una clausura. Cambia el `var` por `let` y observa los cambios.
+
 **14. Eventos y métodos**
 
 Habrá veces en las que tendrás que llamar a un método de un objeto cuando ocurra
@@ -831,4 +834,19 @@ function die(sides) {
 var obj = { history: [] };
 var d20 = bind(die, obj, 20); // fíjate en que ahora die es el primer parámetro
 d20();
+```
+
+Ahora que ya entiendes `bind` entenderás mejor como funciona la preservación del valor de `this` a través
+del operador flecha.
+
+Básicamente puedes asumir que:
+
+```js
+(x,y) => x+y
+```
+
+Es equivalente a:
+
+```js
+function (x,y) { return x+y}.bind(this);
 ```
