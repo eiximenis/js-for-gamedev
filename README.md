@@ -2,6 +2,9 @@
 
 A compilation of materials to learn JavaScript and make HTML5 games.
 
+**IMPORTANT Note** This is a **ECMAScript 2015** port of the original tutorial published by [@ladybenko](https://twitter.com/ladybenko). **ALL credits go to original authors**.
+You can read the original [version here (in spanish)](https://mozdevs.github.io/js-for-gamedev/es/) and the [original repo is here](https://github.com/mozdevs/js-for-gamedev).
+
 ## Build the ebook
 
 This project uses **Node** and **npm scripts** to build and perform some tasks. You will need to have both Node and npm installed in your system.
